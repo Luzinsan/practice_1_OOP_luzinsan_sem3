@@ -12,12 +12,12 @@ namespace luzinsan
 		std::cout << "\nЗдесь было делегирование конструктору с параметрами из конструктора по умолчанию. Создан объект #" << m_id << std::endl;
 	}
 	//Конструктор с параметрами
-	Data::Data(int D, int M, int Y) : m_Day{ D }, m_Month{ M }, m_Y{ Y }, m_id{ m_idCounter++ }
+	Data::Data(int D, int M, int Y) : m_Day{ D }, m_Month{ M }, m_Year{ Y }, m_id{ m_idCounter++ }
 	{
 		std::cout << "\nСработал конструктор по умолчанию. Создан объект #" << m_id << std::endl;
 	}
 	//Конструктор глубокого копирования
-	Data::Data(const Data& fromData) : Data(fromData.m_Day, fromData.m_Month, fromData.m_Y) // Делегирование выполнения конструктору с параметрами
+	Data::Data(const Data& fromData) : Data(fromData.m_Day, fromData.m_Month, fromData.m_Year) // Делегирование выполнения конструктору с параметрами
 	{
 		std::cout << "\nЗдесь было делегирование конструктору с параметрами из конструктора глубокого копирования. Создан объект #" << m_id 
 			      << " по подобию объекта #" << fromData.m_id << std::endl;
@@ -39,15 +39,15 @@ namespace luzinsan
 		}
 
 		// оставшиеся месяцы уже удовлетворяют всем условиям, так как проверены в первом assert
-		m_Day = D; m_Month = M; m_Y = Y;
+		m_Day = D; m_Month = M; m_Year = Y;
 	}
 	void Data::SetDay(int D)
 	{
-		SetData(D, m_Month, m_Y);
+		SetData(D, m_Month, m_Year);
 	}
 	void Data::SetMonth(int M)
 	{
-		SetData(m_Day, M, m_Y);
+		SetData(m_Day, M, m_Year);
 	}
 	void Data::SetYear(int Y)
 	{
@@ -64,7 +64,7 @@ namespace luzinsan
 	}
 	int Data::GetYear() const
 	{
-		return m_Y;
+		return m_Year;
 	}
 	int Data::GetId() const
 	{
@@ -75,18 +75,18 @@ namespace luzinsan
 	{
 		m_Day = fromData.m_Day;
 		m_Month = fromData.m_Month;
-		m_Y = fromData.m_Y;
+		m_Year = fromData.m_Year;
 		return *this;
 	}
 	std::ostream& operator<<(std::ostream& out, const Data& outData)
 	{
-		out << "\nОбъект  #" << outData.m_id << "=> "<< outData.m_Day <<'/'<< outData.m_Month << '/' << outData.m_Y << std::endl;
+		out << "\nОбъект  #" << outData.m_id << "=> "<< outData.m_Day <<'/'<< outData.m_Month << '/' << outData.m_Year << std::endl;
 		return out;
 	}
 	bool Data::operator>(const Data& withData) 
 	{
-		return m_Y > withData.m_Y ? true 
-			: (m_Y < withData.m_Y ? false     /*m_Y == withData.m_Y */
+		return m_Year > withData.m_Year ? true 
+			: (m_Year < withData.m_Year ? false     /*m_Y == withData.m_Y */
 			: (m_Month > withData.m_Month ? true
 			: (m_Month < withData.m_Month ? false     /*m_M == withData.m_M*/
 			: (m_Day > withData.m_Day ? true
@@ -94,8 +94,8 @@ namespace luzinsan
 	}
 	bool Data::operator<(const Data& withData)
 	{
-		return m_Y < withData.m_Y ? true
-			: (m_Y > withData.m_Y ? false     /*m_Y == withData.m_Y */
+		return m_Year < withData.m_Year ? true
+			: (m_Year > withData.m_Year ? false     /*m_Y == withData.m_Y */
 			: (m_Month < withData.m_Month ? true
 			: (m_Month > withData.m_Month ? false     /*m_M == withData.m_M*/
 			: (m_Day < withData.m_Day ? true
@@ -107,7 +107,7 @@ namespace luzinsan
 	{
 		do{
 
-			if(IsLeap(m_Y) && m_Month == 2) // если високосный год и февраль
+			if(IsLeap(m_Year) && m_Month == 2) // если високосный год и февраль
 			{
 				if (m_Day + day > 29)
 				{
@@ -167,7 +167,7 @@ namespace luzinsan
 			case 12: // обработка декабря
 				if (m_Day + day > 31)
 				{
-					m_Y++; 
+					m_Year++; 
 					m_Month = 1; 
 					day -= 32 - m_Day;
 					m_Day = 1;
@@ -187,7 +187,7 @@ namespace luzinsan
 	{
 		do {
 
-			if (IsLeap(m_Y) && m_Month == 3) // если год високосный и предыдущий месяц - февраль
+			if (IsLeap(m_Year) && m_Month == 3) // если год високосный и предыдущий месяц - февраль
 			{
 				if (m_Day - day <= 0)
 				{
@@ -249,7 +249,7 @@ namespace luzinsan
 			case 1: // обработка первого месяца в году - декабря
 				if (m_Day - day <= 0) // если при вычитании мы выходим за рамки месяца, а значит и года
 				{
-					m_Y--;
+					m_Year--;
 					m_Month = 12;
 					day -= m_Day;
 					m_Day = 31;
