@@ -4,7 +4,7 @@
 
 namespace luzinsan
 {
-	int Data::m_idGenerate = 1;
+	int Data::m_idCounter = 1;
 
 	// Конструктор по умолчанию.
 	Data::Data() : Data(1,1,1970) // Делегирование выполнения конструктору с параметрами
@@ -12,12 +12,12 @@ namespace luzinsan
 		std::cout << "\nЗдесь было делегирование конструктору с параметрами из конструктора по умолчанию. Создан объект #" << m_id << std::endl;
 	}
 	//Конструктор с параметрами
-	Data::Data(int D, int M, int Y) : m_D{ D }, m_M{ M }, m_Y{ Y }, m_id{ m_idGenerate++ }
+	Data::Data(int D, int M, int Y) : m_Day{ D }, m_Month{ M }, m_Y{ Y }, m_id{ m_idCounter++ }
 	{
 		std::cout << "\nСработал конструктор по умолчанию. Создан объект #" << m_id << std::endl;
 	}
 	//Конструктор глубокого копирования
-	Data::Data(const Data& fromData) : Data(fromData.m_D, fromData.m_M, fromData.m_Y) // Делегирование выполнения конструктору с параметрами
+	Data::Data(const Data& fromData) : Data(fromData.m_Day, fromData.m_Month, fromData.m_Y) // Делегирование выполнения конструктору с параметрами
 	{
 		std::cout << "\nЗдесь было делегирование конструктору с параметрами из конструктора глубокого копирования. Создан объект #" << m_id 
 			      << " по подобию объекта #" << fromData.m_id << std::endl;
@@ -39,62 +39,66 @@ namespace luzinsan
 		}
 
 		// оставшиеся месяцы уже удовлетворяют всем условиям, так как проверены в первом assert
-		m_D = D; m_M = M; m_Y = Y;
+		m_Day = D; m_Month = M; m_Y = Y;
 	}
 	void Data::SetDay(int D)
 	{
-		SetData(D, m_M, m_Y);
+		SetData(D, m_Month, m_Y);
 	}
 	void Data::SetMonth(int M)
 	{
-		SetData(m_D, M, m_Y);
+		SetData(m_Day, M, m_Y);
 	}
 	void Data::SetYear(int Y)
 	{
-		SetData(m_D, m_M, Y);
+		SetData(m_Day, m_Month, Y);
 	}
 
 	int Data::GetDay() const 
 	{
-		return m_D;
+		return m_Day;
 	}
 	int Data::GetMonth() const
 	{
-		return m_M;
+		return m_Month;
 	}
 	int Data::GetYear() const
 	{
 		return m_Y;
 	}
+	int Data::GetId() const
+	{
+		return m_id;
+	}
 
 	const Data& Data::operator=(const Data& fromData)
 	{
-		m_D = fromData.m_D;
-		m_M = fromData.m_M;
+		m_Day = fromData.m_Day;
+		m_Month = fromData.m_Month;
 		m_Y = fromData.m_Y;
 		return *this;
 	}
 	std::ostream& operator<<(std::ostream& out, const Data& outData)
 	{
-		out << "\nОбъект  #" << outData.m_id << "=> "<< outData.m_D <<'/'<< outData.m_M << '/' << outData.m_Y << std::endl;
+		out << "\nОбъект  #" << outData.m_id << "=> "<< outData.m_Day <<'/'<< outData.m_Month << '/' << outData.m_Y << std::endl;
 		return out;
 	}
 	bool Data::operator>(const Data& withData) 
 	{
 		return m_Y > withData.m_Y ? true 
 			: (m_Y < withData.m_Y ? false     /*m_Y == withData.m_Y */
-			: (m_M > withData.m_M ? true
-			: (m_M < withData.m_M ? false     /*m_M == withData.m_M*/
-			: (m_D > withData.m_D ? true
+			: (m_Month > withData.m_Month ? true
+			: (m_Month < withData.m_Month ? false     /*m_M == withData.m_M*/
+			: (m_Day > withData.m_Day ? true
 			:                       false))));/*this <= withData*/
 	}
 	bool Data::operator<(const Data& withData)
 	{
 		return m_Y < withData.m_Y ? true
 			: (m_Y > withData.m_Y ? false     /*m_Y == withData.m_Y */
-			: (m_M < withData.m_M ? true
-			: (m_M > withData.m_M ? false     /*m_M == withData.m_M*/
-			: (m_D < withData.m_D ? true
+			: (m_Month < withData.m_Month ? true
+			: (m_Month > withData.m_Month ? false     /*m_M == withData.m_M*/
+			: (m_Day < withData.m_Day ? true
 						          : false))));/*this >= withData*/
 	}
 
@@ -103,74 +107,74 @@ namespace luzinsan
 	{
 		do{
 
-			if(IsLeap(m_Y) && m_M == 2) // если високосный год и февраль
+			if(IsLeap(m_Y) && m_Month == 2) // если високосный год и февраль
 			{
-				if (m_D + day > 29)
+				if (m_Day + day > 29)
 				{
-					m_M++;
-					day -= 30 - m_D;
-					m_D = 1;
+					m_Month++;
+					day -= 30 - m_Day;
+					m_Day = 1;
 					continue;
 				}
 				else
 				{
-					m_D += day;
+					m_Day += day;
 					return *this;
 				}
 			}
-			switch (m_M)
+			switch (m_Month)
 			{
 			case 2: // обработка февраля в невисокосном году
-				if (m_D + day > 28)
+				if (m_Day + day > 28)
 				{
-					m_M++;
-					day -= 29 - m_D;
-					m_D = 1;
+					m_Month++;
+					day -= 29 - m_Day;
+					m_Day = 1;
 				}
 				else
 				{
-					m_D += day;
+					m_Day += day;
 					return *this;
 				}
 				break;
 				
 			case 4: case 6: case 9: case 11:  // обработка месяцев, содержащих по 30 дней
-				if (m_D + day > 30)
+				if (m_Day + day > 30)
 				{
-					m_M++;
-					day -= 31 - m_D;
-					m_D = 1;
+					m_Month++;
+					day -= 31 - m_Day;
+					m_Day = 1;
 				}
 				else
 				{
-					m_D += day;
+					m_Day += day;
 					return *this;
 				}
 				break;
 			case 1: case 3: case 5: case 7: case 8: case 10:   // обработка месяцев, содержащих по 31 день
-				if (m_D + day > 31)
+				if (m_Day + day > 31)
 				{
-					m_M++;
-					day -= 32 - m_D;
-					m_D = 1;
+					m_Month++;
+					day -= 32 - m_Day;
+					m_Day = 1;
 				}
 				else
 				{
-					m_D += day;
+					m_Day += day;
 					return *this;
 				}
 				break;
 			case 12: // обработка декабря
-				if (m_D + day > 31)
+				if (m_Day + day > 31)
 				{
 					m_Y++; 
-					m_M = 1; 
-					day -= 32 - m_D;
-					m_D = 1;
+					m_Month = 1; 
+					day -= 32 - m_Day;
+					m_Day = 1;
 				}
 				else 
 				{
-					m_D += day;
+					m_Day += day;
 					return *this;
 				}
 			}
@@ -183,77 +187,77 @@ namespace luzinsan
 	{
 		do {
 
-			if (IsLeap(m_Y) && m_M == 3) // если год високосный и предыдущий месяц - февраль
+			if (IsLeap(m_Y) && m_Month == 3) // если год високосный и предыдущий месяц - февраль
 			{
-				if (m_D - day <= 0)
+				if (m_Day - day <= 0)
 				{
-					m_M--;
-					day -= m_D;
-					m_D = 29;
+					m_Month--;
+					day -= m_Day;
+					m_Day = 29;
 					continue;
 				}
 				else
 				{
-					m_D -= day;
+					m_Day -= day;
 					return *this;
 				}
 			}
-			switch (m_M)
+			switch (m_Month)
 			{
 			case 3: // если год невисокосный и предыдущий месяц - февраль
-				if (m_D - day <= 0)
+				if (m_Day - day <= 0)
 				{
-					m_M--;
-					day -= m_D;
-					m_D = 28;
+					m_Month--;
+					day -= m_Day;
+					m_Day = 28;
 					continue;
 				}
 				else
 				{
-					m_D -= day;
+					m_Day -= day;
 					return *this;
 				}
 				break;
 			case 2: case 4: case 6: case 8: case 9: case 11:  // обработка месяцев, содержащие в предыдущих месяцах по 30 дней
-				if (m_D - day <= 0)
+				if (m_Day - day <= 0)
 				{
-					m_M--;
-					day -= m_D;
-					m_D = 31;
+					m_Month--;
+					day -= m_Day;
+					m_Day = 31;
 					continue;
 				}
 				else
 				{
-					m_D -= day;
+					m_Day -= day;
 					return *this;
 				}
 				break;
 			case 5: case 7: case 10: case 12:    // обработка месяцев, содержащих в предыдущих месяцах по 31 день
-				if (m_D - day <= 0)
+				if (m_Day - day <= 0)
 				{
-					m_M--;
-					day -= m_D;
-					m_D = 30;
+					m_Month--;
+					day -= m_Day;
+					m_Day = 30;
 					continue;
 				}
 				else
 				{
-					m_D -= day;
+					m_Day -= day;
 					return *this;
 				}
 				break;
 			case 1: // обработка первого месяца в году - декабря
-				if (m_D - day <= 0) // если при вычитании мы выходим за рамки месяца, а значит и года
+				if (m_Day - day <= 0) // если при вычитании мы выходим за рамки месяца, а значит и года
 				{
 					m_Y--;
-					m_M = 12;
-					day -= m_D;
-					m_D = 31;
+					m_Month = 12;
+					day -= m_Day;
+					m_Day = 31;
 					continue;
 				}
 				else // если при вычитании дней мы остаемся в рамках этого месяца, то остаёмся и в рамках этого года
 				{
-					m_D -= day;
+					m_Day -= day;
 					return *this;
 				}
 			}
