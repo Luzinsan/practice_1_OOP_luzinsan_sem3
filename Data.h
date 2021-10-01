@@ -6,9 +6,9 @@ namespace luzinsan
     class Data
     {
     private:
-        int m_D, m_M, m_Y;
+        int m_Day, m_Month, m_Y;
         int m_id;
-        static int m_idGenerate;
+        static int m_idCounter;
     public:
         Data();
         Data(int,int,int);
@@ -20,6 +20,7 @@ namespace luzinsan
         int GetDay() const;
         int GetMonth() const;
         int GetYear() const;
+        int GetId() const;
         const Data& operator=(const Data&);
         friend std::ostream& operator<<(std::ostream& out, const Data& outData);
         const Data& operator+=(int day);
