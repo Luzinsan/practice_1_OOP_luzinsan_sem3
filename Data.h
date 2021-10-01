@@ -6,7 +6,7 @@ namespace luzinsan
     class Data
     {
     private:
-        int m_Day, m_Month, m_Y;
+        int m_Day, m_Month, m_Year;
         int m_id;
         static int m_idCounter;
     public:
