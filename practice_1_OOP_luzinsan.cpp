@@ -1,4 +1,4 @@
-﻿#include <iostream>
+#include <iostream>
 #include "Data.h"
 
 //Вариант 11
