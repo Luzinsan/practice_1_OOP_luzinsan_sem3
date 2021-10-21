@@ -18,6 +18,6 @@
 * Определить операции сравнения дат (<, >), 
 * а также увеличения и уменьшения даты на целое количество дней (+=, –=).
 
-UMP diagram
+UML diagram
 
 ![image](https://user-images.githubusercontent.com/53607329/138206893-65b72ce3-129b-4b28-aed3-c95d3129a490.png)
