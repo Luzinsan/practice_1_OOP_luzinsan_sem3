@@ -18,3 +18,5 @@
 * Определить операции сравнения дат (<, >), 
 * а также увеличения и уменьшения даты на целое количество дней (+=, –=).
 
+UMP diagram
+https://github.com/Luzinsan/practice_1_OOP_luzinsan_sem3/blob/main/practice1_luzinsan.jpg
